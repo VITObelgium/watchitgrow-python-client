@@ -14,5 +14,5 @@ pythonPipeline {
   python_version = ['3.6']
   pre_test_script = 'pre_test_script.sh'
   create_tag_job = true
-  run_tests = false
+  run_tests = true
 }
