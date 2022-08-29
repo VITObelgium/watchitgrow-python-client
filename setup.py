@@ -19,7 +19,8 @@ setup(name=name,
       test_suite='tests',
       install_requires=[
           'requests>=2.26.0',
-            'oauthlib'
+          'oauthlib',
+          'requests_oauthlib'
       ],
       extras_require={
           "dev": tests_require + []
