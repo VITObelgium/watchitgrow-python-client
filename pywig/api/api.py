@@ -3,7 +3,7 @@ import logging
 import requests
 from requests import Response
 
-from pywig.api.ApiError import ApiError
+from pywig.api.error import ApiError
 from pywig.api.models.field import Field
 from pywig.auth.auth import Auth
 from pywig.config import Config
