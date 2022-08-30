@@ -6,6 +6,9 @@
 Welcome to WatchItGrow Python Client's documentation!
 =====================================================
 
+This repository contains the source code for the WatchItGrow Python Client.
+It allows you to interact with the data in WatchItGrow through Python scripts.
+
 .. note::
 
    This project is under active development.
@@ -15,7 +18,7 @@ Welcome to WatchItGrow Python Client's documentation!
    :caption: Contents:
 
    installation
-   api
+   pywig
 
 
 
