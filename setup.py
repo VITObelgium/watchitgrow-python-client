@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 _version = {}
-with open('wig/_version.py') as fp:
+with open('pywig/_version.py') as fp:
     exec(fp.read(), _version)
 
 tests_require = []

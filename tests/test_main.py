@@ -1,6 +1,6 @@
 import pytest as pytest
 
-from wig import Wig
+from pywig import Wig
 
 
 @pytest.mark.parametrize("env", ['prod'])

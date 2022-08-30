@@ -8,7 +8,7 @@ load_dotenv()
 # ---------------------------------------------------------
 #                  MAIN
 # ---------------------------------------------------------
-from wig import Wig
+from pywig import Wig
 
 field_id = '<FIELD_ID>'
 

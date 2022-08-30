@@ -3,7 +3,7 @@ import logging
 from oauthlib.oauth2 import LegacyApplicationClient
 from requests_oauthlib import OAuth2Session
 
-from wig.config import Config
+from pywig.config import Config
 
 
 class Auth:

@@ -3,10 +3,10 @@ import logging
 import requests
 from requests import Response
 
-from wig.api.ApiError import ApiError
-from wig.api.models.field import Field
-from wig.auth.auth import Auth
-from wig.config import Config
+from pywig.api.ApiError import ApiError
+from pywig.api.models.field import Field
+from pywig.auth.auth import Auth
+from pywig.config import Config
 
 
 class Api:

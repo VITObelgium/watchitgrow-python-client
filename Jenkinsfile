@@ -12,6 +12,5 @@ pythonPipeline {
   wipeout_workspace = true
   wheel_repo = 'python-packages-public'
   python_version = ['3.6']
-  create_tag_job = true
   run_tests = true
 }

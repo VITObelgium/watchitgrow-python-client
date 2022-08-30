@@ -1,9 +1,9 @@
 import logging.config
 import pathlib
 
-from wig.api.api import Api
-from wig.api.models.field import Field
-from wig.auth.auth import Auth
+from pywig.api.api import Api
+from pywig.api.models.field import Field
+from pywig.auth.auth import Auth
 
 logging.config.fileConfig(pathlib.Path(__file__).parent.resolve() / 'logging.conf')
 
