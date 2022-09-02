@@ -37,3 +37,11 @@ class Wig:
         :rtype: Field
         """
         return self._api.get_field(id=id)
+
+    def get_fields(self) -> Field:
+        """
+        Retrieve all fields linked to the authenticated user
+        :return: Field object
+        :rtype: Field
+        """
+        return self._api.get_fields()

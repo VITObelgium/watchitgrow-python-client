@@ -2,6 +2,7 @@ import logging
 
 import requests
 from requests import Response
+import json
 
 from pywig.api.error import ApiError
 from pywig.api.models.field import Field
@@ -33,6 +34,18 @@ class Api:
         self._logger.debug('Retrieving information for field %s' % id)
         response = self._get('application/databio/fields/%s' % id)
         return Field(id=response['id'], source=response['source'])
+
+    def get_fields(self) -> Field:
+        """
+        Retrieve all fields linked to the authenticated user
+        :return: Field object containing the detailed field information
+        """
+        self._logger.debug('Retrieving fields')
+        response = self._get('application/databio/fields/list?source=metadata,cropFenology')
+        fields = []
+        for field in response:
+            fields.append(Field(id=field['id'], source=field['source']))
+        return fields
 
     # ---------------------------------------------------------------------
     #       UTILS
