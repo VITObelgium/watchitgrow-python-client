@@ -38,7 +38,7 @@ class Wig:
         """
         return self._api.get_field(id=id)
 
-    def get_fields(self) -> Field:
+    def get_fields(self) -> list[Field]:
         """
         Retrieve all fields linked to the authenticated user
         :return: Field object
