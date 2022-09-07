@@ -4,8 +4,11 @@ import requests
 from requests import Response
 import json
 
+from shapely.geometry import shape
+
 from pywig.api.error import ApiError
 from pywig.api.models.field import Field
+from pywig.api.models.meteostat import MeteoStat
 from pywig.auth.auth import Auth
 from pywig.config import Config
 
@@ -32,7 +35,7 @@ class Api:
         :return: Field object containing the detailed field information
         """
         self._logger.debug('Retrieving information for field %s' % id)
-        response = self._get('application/databio/fields/%s' % id)
+        response = self._get('databio/application/databio/fields/%s' % id)
         return Field(id=response['id'], source=response['source'])
 
     def get_fields(self) -> list[Field]:
@@ -41,11 +44,43 @@ class Api:
         :return: Field object containing the detailed field information
         """
         self._logger.debug('Retrieving fields')
-        response = self._get('application/databio/fields/list?source=metadata,cropFenology')
+        response = self._get('databio/application/databio/fields/list?source=metadata,cropFenology')
         fields = []
         for field in response:
             fields.append(Field(id=field['id'], source=field['source']))
         return fields
+
+    # ---------------------------------------------------------------------
+    #       METEO
+    # ---------------------------------------------------------------------
+    def get_meteo_data(self, geometry: dict, start_date: str, end_date: str, key: str) -> list[MeteoStat]:
+        """
+        Retrieve the meteo statistics from the API
+        :param geometry: Geometry for which to retrieve the statistics
+        :param start_date: Start date for the statistics
+        :param end_date: End date for the statistics
+        :param key: Key representing the type of statistic that should be requested (AVERAGE_TEMPERATURE,
+        MAXIMUM_TEMPERATURE, MINIMUM_TEMPERATURE, RAINFALL)
+        :return: A list of statistics representing the meteo information that was requested
+        """
+        self._logger.debug(f'Requesting KMI data for {key} with a range from {start_date} to {end_date}')
+        bbox = shape(geometry).bounds
+        response = self._post(f'/kmi/{key.upper()}', {
+            'interval': 1,
+            'minX': bbox[0],
+            'minY': bbox[1],
+            'maxX': bbox[2],
+            'maxY': bbox[3],
+            'range': {
+                'gte': start_date,
+                'lte': end_date
+            }
+        })
+        if 'aggregations' in response and 'date_histogram#aggregatedTimeSeries' in response['aggregations']:
+            return list(map(lambda x: MeteoStat(date=x['key_as_string'], value=x['avg#aggResult']['value']),
+                            response['aggregations']['date_histogram#aggregatedTimeSeries']['buckets']))
+        else:
+            raise Exception('Could not parse the meteo response from the API')
 
     # ---------------------------------------------------------------------
     #       UTILS
@@ -54,9 +89,13 @@ class Api:
         response = requests.get('%s/%s' % (self._base_url, url), headers=self._get_headers())
         return self._parse_response(response)
 
+    def _post(self, url, body):
+        response = requests.post('%s/%s' % (self._base_url, url), json=body, headers=self._get_headers())
+        return self._parse_response(response)
+
     def _parse_response(self, response: Response):
         if response.status_code != 200:
-            raise ApiError(message='Could not execute request', response=response)
+            raise ApiError(message='Could not execute request to the API', response=response)
         else:
             return response.json()
 

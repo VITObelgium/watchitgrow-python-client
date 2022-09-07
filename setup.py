@@ -20,7 +20,8 @@ setup(name=name,
       install_requires=[
           'requests>=2.26.0',
           'oauthlib',
-          'requests_oauthlib'
+          'requests_oauthlib',
+          'shapely'
       ],
       extras_require={
           "dev": tests_require + []

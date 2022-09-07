@@ -1,8 +1,10 @@
-import logging
 import json
+import logging
+
+from pywig.api.models import JsonObject
 
 
-class Field:
+class Field(JsonObject):
     def __init__(self, id: str, source: object):
         self._id = id
         self._parse_source(source)
@@ -23,7 +25,7 @@ class Field:
         self.yields = source['yields'] if 'yields' in source else None
         self.application_maps = source['applicationmaps'] if 'applicationmaps' in source else None
         self.statistics = source['statistics'] if 'statistics' in source else None
-        self.meteo = source['meteo'] if hasattr(source, 'meteo') else None
+        self.meteo = source['meteo'] if 'meteo' in source else None
 
     def to_json(self):
         field = dict()
@@ -41,10 +43,5 @@ class Field:
         field['yields'] = self.yields
         field['application_maps'] = self.application_maps
         field['statistics'] = self.statistics
+        field['meteo'] = self.meteo
         return field
-
-    def __str__(self):
-        return json.dumps(self.to_json(), indent=4)
-
-    def __repr__(self):
-        return self.__str__()
