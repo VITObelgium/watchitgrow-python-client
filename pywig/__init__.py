@@ -15,49 +15,48 @@ class Wig:
     """
 
     def __init__(self, env: str = 'prod'):
-        """
-        Initialise the WIG Python client by specifying the environment to which you want to connect. In this case the
+        """Initialise the WIG Python client by specifying the environment to which you want to connect. In this case the
         production environment matches the data that is available in the main application: https://app.watchitgrow.be
+
         :param env: Environment to which you want to connect to (dev or prod). The default is the production environment
         """
         self._auth = Auth(env=env)
         self._api = Api(auth=self._auth, env=env)
 
     def authenticate_basic(self, username: str, password: str):
-        """
-        Authenticate with WIG using your username and password
+        """Authenticate with WIG using your username and password
+
         :param username: Username of your WIG account
         :param password: Password of your WIG account
         """
         self._auth.authenticate_basic(username=username, password=password)
 
-    def get_field(self, id) -> Field:
-        """
-        Retrieve a field based on its ID
+    def get_field_details(self, id) -> Field:
+        """Retrieve a field based on its ID
+
         :param id: ID of the field to retrieve
-        :return: Field object
+        :return: Field object containing the full field details
         :rtype: Field
         """
         return self._api.get_field(id=id)
 
     def get_fields(self) -> list[Field]:
-        """
-        Retrieve all fields linked to the authenticated user
-        :return: Field object
-        :rtype: Field
+        """Retrieve all fields linked to the authenticated user
+
+        :return: List of field objects containing the basic field information
+        :rtype: List
         """
         return self._api.get_fields()
 
     def get_meteo(self, field_id: str, key: str) -> list[MeteoStat]:
-        """
-        Retrieve the meteo statistics for the selected field
+        """Retrieve the meteo statistics for the selected field
+
         :param field_id: ID of the field for which to retrieve the meteo statistics
-        :param key: Key that represents what type of meteo information should be fetched. For fields inside of Belgium,
-        the supported keys are (AVERAGE_TEMPERATURE, MAXIMUM_TEMPERATURE, MINIMUM_TEMPERATURE, RAINFALL). For fields
-        outside of Belgium, the supported keys are (TEMPERATURE, RAINFALL).
-        :return:
+        :param key: Key that represents what type of meteo information should be fetched. For fields inside of Belgium, the supported keys are (AVERAGE_TEMPERATURE, MAXIMUM_TEMPERATURE, MINIMUM_TEMPERATURE, RAINFALL). For fields outside of Belgium, the supported keys are (TEMPERATURE, RAINFALL).
+        :return: A list of MeteoStat entries
+        :rtype: List
         """
-        field = self.get_field(field_id)
+        field = self.get_field_details(field_id)
         if field.meteo:
             if key.lower() in field.meteo:
                 return list(map(lambda x: MeteoStat(date=x['date'], value=x['value']), field.meteo[key.lower()]))

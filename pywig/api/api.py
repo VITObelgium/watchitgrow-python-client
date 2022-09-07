@@ -15,8 +15,8 @@ from pywig.config import Config
 
 class Api:
     def __init__(self, auth: Auth, env: str = 'prod'):
-        """
-        Initialize the API object for WatchItGrow
+        """Initialize the API object for WatchItGrow
+
         :param auth: Authentication object containing client information to connect to WIG backend
         :param env: Environment to use (dev, prod). Default is set to prod
         """
@@ -29,8 +29,8 @@ class Api:
     #       FIELDS
     # ---------------------------------------------------------------------
     def get_field(self, id: str) -> Field:
-        """
-        Retrieve the field information for one specific field
+        """Retrieve the field information for one specific field
+
         :param id: ID of the field for which to retrieve the information
         :return: Field object containing the detailed field information
         """
@@ -39,8 +39,8 @@ class Api:
         return Field(id=response['id'], source=response['source'])
 
     def get_fields(self) -> list[Field]:
-        """
-        Retrieve all fields linked to the authenticated user
+        """Retrieve all fields linked to the authenticated user
+
         :return: Field object containing the detailed field information
         """
         self._logger.debug('Retrieving fields')
@@ -54,8 +54,8 @@ class Api:
     #       METEO
     # ---------------------------------------------------------------------
     def get_meteo_data(self, geometry: dict, start_date: str, end_date: str, key: str) -> list[MeteoStat]:
-        """
-        Retrieve the meteo statistics from the API
+        """Retrieve the meteo statistics from the API
+
         :param geometry: Geometry for which to retrieve the statistics
         :param start_date: Start date for the statistics
         :param end_date: End date for the statistics
@@ -86,22 +86,39 @@ class Api:
     #       UTILS
     # ---------------------------------------------------------------------
     def _get(self, url):
+        """Execute a GET request to the WIG API
+
+        :param url: URL to which the post request should be made
+        :return: JSON body of the response
+        """
         response = requests.get('%s/%s' % (self._base_url, url), headers=self._get_headers())
         return self._parse_response(response)
 
     def _post(self, url, body):
+        """Execute a POST request to the WIG API
+
+        :param url: URL to which the post request should be made
+        :param body: Body of the post request
+        :return: JSON body of the response
+        """
         response = requests.post('%s/%s' % (self._base_url, url), json=body, headers=self._get_headers())
         return self._parse_response(response)
 
     def _parse_response(self, response: Response):
+        """Parse the response coming back from the API
+
+        :param response: Response object
+        :raises ApiError: Error that is raised whenever the API does not send a 200 response
+        :return: JSON body of the response
+        """
         if response.status_code != 200:
             raise ApiError(message='Could not execute request to the API', response=response)
         else:
             return response.json()
 
     def _get_headers(self) -> object:
-        """
-        Create the headers that should be added to each outgoing request to the API
+        """Create the headers that should be added to each outgoing request to the API
+
         :return: Object representing the headers for the API request
         """
         return {

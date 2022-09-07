@@ -15,6 +15,6 @@ field_id = '<FIELD_ID>'
 wig = Wig()
 wig.authenticate_basic(username=os.getenv('username'), password=os.getenv('password'))
 
-field = wig.get_field(id=field_id)
+field = wig.get_field_details(id=field_id)
 
 print(field)
