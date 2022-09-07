@@ -3,5 +3,5 @@ import os
 
 
 def get_json_fixture(path: str):
-    with open(f'{os.getcwd()}/fixtures/{path}', 'r') as fixture:
+    with open(f'{os.getcwd()}/tests/fixtures/{path}', 'r') as fixture:
         return json.load(fixture)
