@@ -11,18 +11,19 @@ class Field:
     def _parse_source(self, source):
         self.metadata = source['metadata']
         self.cropInfo = source['cropFenology']
-        self.damages = source['damages'] if hasattr(source, 'damages') else {}
-        self.treatments = source['treatments'] if hasattr(source, 'treatments') else {}
-        self.irrigations = source['irrigation'] if hasattr(source, 'irrigation') else {}
-        self.harvests = source['harvest'] if hasattr(source, 'harvest') else {}
-        self.baling = source['baling'] if hasattr(source, 'baling') else {}
-        self.heckling = source['heckling'] if hasattr(source, 'heckling') else {}
-        self.bbch_stages = source['fenologies'] if hasattr(source, 'fenologies') else {}
-        self.preparations = source['preparation'] if hasattr(source, 'preparation') else {}
-        self.warnings = source['warnings'] if hasattr(source, 'warnings') else {}
-        self.yields = source['yields'] if hasattr(source, 'yields') else {}
-        self.application_maps = source['applicationmaps'] if hasattr(source, 'applicationmaps') else {}
-        self.statistics = source['statistics'] if hasattr(source, 'statistics') else {}
+        self.damages = source['damages'] if hasattr(source, 'damages') else None
+        self.treatments = source['treatments'] if hasattr(source, 'treatments') else None
+        self.irrigations = source['irrigation'] if hasattr(source, 'irrigation') else None
+        self.harvests = source['harvest'] if hasattr(source, 'harvest') else None
+        self.baling = source['baling'] if hasattr(source, 'baling') else None
+        self.heckling = source['heckling'] if hasattr(source, 'heckling') else None
+        self.bbch_stages = source['fenologies'] if hasattr(source, 'fenologies') else None
+        self.preparations = source['preparation'] if hasattr(source, 'preparation') else None
+        self.warnings = source['warnings'] if hasattr(source, 'warnings') else None
+        self.yields = source['yields'] if hasattr(source, 'yields') else None
+        self.application_maps = source['applicationmaps'] if hasattr(source, 'applicationmaps') else None
+        self.statistics = source['statistics'] if hasattr(source, 'statistics') else None
+        self.meteo = source['meteo'] if hasattr(source, 'meteo') else None
 
     def to_json(self):
         field = dict()
