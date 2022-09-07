@@ -1,4 +1,5 @@
 import logging
+from typing import List
 
 import requests
 from requests import Response
@@ -38,7 +39,7 @@ class Api:
         response = self._get('databio/application/databio/fields/%s' % id)
         return Field(id=response['id'], source=response['source'])
 
-    def get_fields(self) -> list[Field]:
+    def get_fields(self) -> List[Field]:
         """Retrieve all fields linked to the authenticated user
 
         :return: Field object containing the detailed field information
@@ -53,7 +54,7 @@ class Api:
     # ---------------------------------------------------------------------
     #       METEO
     # ---------------------------------------------------------------------
-    def get_meteo_data(self, geometry: dict, start_date: str, end_date: str, key: str) -> list[MeteoStat]:
+    def get_meteo_data(self, geometry: dict, start_date: str, end_date: str, key: str) -> List[MeteoStat]:
         """Retrieve the meteo statistics from the API
 
         :param geometry: Geometry for which to retrieve the statistics
@@ -85,7 +86,7 @@ class Api:
     # ---------------------------------------------------------------------
     #       UTILS
     # ---------------------------------------------------------------------
-    def _get(self, url):
+    def _get(self, url) -> object:
         """Execute a GET request to the WIG API
 
         :param url: URL to which the post request should be made
@@ -94,7 +95,7 @@ class Api:
         response = requests.get('%s/%s' % (self._base_url, url), headers=self._get_headers())
         return self._parse_response(response)
 
-    def _post(self, url, body):
+    def _post(self, url, body) -> object:
         """Execute a POST request to the WIG API
 
         :param url: URL to which the post request should be made
@@ -104,7 +105,7 @@ class Api:
         response = requests.post('%s/%s' % (self._base_url, url), json=body, headers=self._get_headers())
         return self._parse_response(response)
 
-    def _parse_response(self, response: Response):
+    def _parse_response(self, response: Response) -> object:
         """Parse the response coming back from the API
 
         :param response: Response object

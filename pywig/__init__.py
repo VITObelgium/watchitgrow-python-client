@@ -1,5 +1,6 @@
 import logging.config
 import pathlib
+from typing import List
 
 from pywig.api.api import Api
 from pywig.api.models.field import Field
@@ -40,7 +41,7 @@ class Wig:
         """
         return self._api.get_field(id=id)
 
-    def get_fields(self) -> list[Field]:
+    def get_fields(self) -> List[Field]:
         """Retrieve all fields linked to the authenticated user
 
         :return: List of field objects containing the basic field information
@@ -48,7 +49,7 @@ class Wig:
         """
         return self._api.get_fields()
 
-    def get_meteo(self, field_id: str, key: str) -> list[MeteoStat]:
+    def get_meteo(self, field_id: str, key: str) -> List[MeteoStat]:
         """Retrieve the meteo statistics for the selected field
 
         :param field_id: ID of the field for which to retrieve the meteo statistics
