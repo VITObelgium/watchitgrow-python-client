@@ -1,6 +1,7 @@
 import unittest
 import json
 from unittest import mock
+import datetime
 
 from mocks.mockresponse import MockResponse
 
@@ -32,6 +33,35 @@ class FieldTestCases(unittest.TestCase):
         """
         wig = Wig()
         result = list(map(lambda x: str(x), wig.get_meteo(field_id='foobar', key='temperature')))
+        self.assertEqual(json.dumps(result), json.dumps([str(MeteoStat(date='2022-01-01', value=1337.01))]))
+
+    @mock.patch('requests.get', side_effect=lambda *args, **kwargs: MockResponse({
+        'id': 'foobar',
+        'source': {
+            'metadata': {},
+            'cropFenology': {},
+            'meteo': {
+                'temperature': [
+                    {
+                        'date': '2015-01-01',
+                        'value': 1337.01
+                    },
+                    {
+                        'date': '2022-01-01',
+                        'value': 1337.01
+                    }
+                ]
+            }
+        }
+    }, 200, None))
+    def test_field_meteo_stats_with_start_end_date(self, mockGet):
+        """
+        Should correctly pass and process the statistics that are already linked to the field between the start- and enddate range
+        :return:
+        """
+        wig = Wig()
+        result = list(map(lambda x: str(x), wig.get_meteo(field_id='foobar', key='temperature',
+                                                          start_date=datetime.date(2022, 1, 1), end_date=datetime.date(2023, 1, 1))))
         self.assertEqual(json.dumps(result), json.dumps([str(MeteoStat(date='2022-01-01', value=1337.01))]))
 
     @mock.patch('requests.get', side_effect=lambda *args, **kwargs: MockResponse({

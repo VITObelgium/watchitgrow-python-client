@@ -64,7 +64,10 @@ class Wig:
         if field.meteo:
             if key.lower() in field.meteo:
                 meteo = list(map(lambda x: MeteoStat(date=x['date'], value=x['value']), field.meteo[key.lower()]))
-                meteo = [x for x in meteo if start_date <= datetime.datetime.strptime(x.date, "%Y-%m-%d").date() <= end_date]
+                if start_date:
+                    meteo = [x for x in meteo if start_date <= datetime.datetime.strptime(x.date, "%Y-%m-%d").date()]
+                if end_date:
+                    meteo = [x for x in meteo if datetime.datetime.strptime(x.date, "%Y-%m-%d").date() <= end_date]
                 return meteo
             else:
                 raise Exception(
