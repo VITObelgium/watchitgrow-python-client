@@ -1,5 +1,6 @@
 import logging.config
 import pathlib
+import datetime
 from typing import List
 
 from pywig.api.api import Api
@@ -49,21 +50,28 @@ class Wig:
         """
         return self._api.get_fields()
 
-    def get_meteo(self, field_id: str, key: str) -> List[MeteoStat]:
+    def get_meteo(self, field_id: str, key: str, start_date: datetime.date = None, end_date: datetime.date = None) -> List[MeteoStat]:
         """Retrieve the meteo statistics for the selected field
 
         :param field_id: ID of the field for which to retrieve the meteo statistics
         :param key: Key that represents what type of meteo information should be fetched. For fields inside of Belgium, the supported keys are (AVERAGE_TEMPERATURE, MAXIMUM_TEMPERATURE, MINIMUM_TEMPERATURE, RAINFALL). For fields outside of Belgium, the supported keys are (TEMPERATURE, RAINFALL).
+        :param start_date: The date from where to retrieve the meteo data
+        :param end_date: The end date for the meteo data retrieval
         :return: A list of MeteoStat entries
         :rtype: List
         """
         field = self.get_field_details(field_id)
         if field.meteo:
             if key.lower() in field.meteo:
-                return list(map(lambda x: MeteoStat(date=x['date'], value=x['value']), field.meteo[key.lower()]))
+                meteo = list(map(lambda x: MeteoStat(date=x['date'], value=x['value']), field.meteo[key.lower()]))
+                meteo = [x for x in meteo if start_date <= datetime.datetime.strptime(x.date, "%Y-%m-%d").date() <= end_date]
+                return meteo
             else:
                 raise Exception(
                     f'Meteo statistic {key} is not supported for this field, only {",".join(field.meteo.keys())}')
         else:
-            return self._api.get_meteo_data(geometry=field.metadata['geometry'], start_date=field.metadata['startDate'],
-                                            end_date=field.metadata['endDate'], key=key)
+            start_date = start_date.isoformat() if start_date else field.metadata['startDate']
+            end_date = end_date.isoformat() if end_date else field.metadata['endDate']
+
+            return self._api.get_meteo_data(geometry=field.metadata['geometry'], key=key,
+                                            start_date=start_date, end_date=end_date)
