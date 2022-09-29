@@ -13,4 +13,5 @@ pythonPipeline {
   wheel_repo = 'python-packages-public'
   python_version = ['3.6']
   run_tests = true
+  create_tag_job = true
 }
