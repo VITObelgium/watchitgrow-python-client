@@ -1,5 +1,3 @@
-import logging.config
-import pathlib
 import datetime
 from typing import List
 
@@ -7,8 +5,6 @@ from pywig.api.api import Api
 from pywig.api.models.field import Field
 from pywig.api.models.meteostat import MeteoStat
 from pywig.auth.auth import Auth
-
-logging.config.fileConfig(pathlib.Path(__file__).parent.resolve() / 'logging.conf')
 
 
 class Wig:
@@ -50,7 +46,8 @@ class Wig:
         """
         return self._api.get_fields()
 
-    def get_meteo(self, field_id: str, key: str, start_date: datetime.date = None, end_date: datetime.date = None) -> List[MeteoStat]:
+    def get_meteo(self, field_id: str, key: str, start_date: datetime.date = None, end_date: datetime.date = None) -> \
+    List[MeteoStat]:
         """Retrieve the meteo statistics for the selected field
 
         :param field_id: ID of the field for which to retrieve the meteo statistics
