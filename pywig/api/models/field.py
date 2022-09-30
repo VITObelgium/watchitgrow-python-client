@@ -6,7 +6,7 @@ from pywig.api.models import JsonObject
 
 class Field(JsonObject):
     def __init__(self, id: str, source: object):
-        self._id = id
+        self.id = id
         self._parse_source(source)
         self._logger = logging.getLogger('field')
 
@@ -29,6 +29,7 @@ class Field(JsonObject):
 
     def to_json(self):
         field = dict()
+        field['id'] = self.id
         field['metadata'] = self.metadata
         field['cropInfo'] = self.cropInfo
         field['damages'] = self.damages
