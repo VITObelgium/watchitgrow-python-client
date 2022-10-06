@@ -79,7 +79,7 @@ class Api:
         })
         if 'aggregations' in response and 'date_histogram#aggregatedTimeSeries' in response['aggregations']:
             if len(response['aggregations']['date_histogram#aggregatedTimeSeries']['buckets']) > 0:
-                if (response['aggregations']['date_histogram#aggregatedTimeSeries']['buckets'][0]['sum#aggResult']):
+                if ('sum#aggResult' in response['aggregations']['date_histogram#aggregatedTimeSeries']['buckets'][0]):
                     return list(map(lambda x: MeteoStat(date=x['key_as_string'], value=x['sum#aggResult']['value']),
                             response['aggregations']['date_histogram#aggregatedTimeSeries']['buckets']))
                 else:
