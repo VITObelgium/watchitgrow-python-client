@@ -78,7 +78,7 @@ class Api:
             }
         })
         if 'aggregations' in response and 'date_histogram#aggregatedTimeSeries' in response['aggregations']:
-            return list(map(lambda x: MeteoStat(date=x['key_as_string'], value=x['avg#aggResult']['value']),
+            return list(map(lambda x: MeteoStat(date=x['key_as_string'], value=x['sum#aggResult']['value']),
                             response['aggregations']['date_histogram#aggregatedTimeSeries']['buckets']))
         else:
             raise Exception('Could not parse the meteo response from the API')
