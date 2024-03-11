@@ -58,20 +58,19 @@ class Wig:
         :rtype: List
         """
         field = self.get_field_details(field_id)
-        if field.meteo:
-            if key.lower() in field.meteo:
-                meteo = list(map(lambda x: MeteoStat(date=x['date'], value=x['value']), field.meteo[key.lower()]))
-                if start_date:
-                    meteo = [x for x in meteo if start_date <= datetime.datetime.strptime(x.date, "%Y-%m-%d").date()]
-                if end_date:
-                    meteo = [x for x in meteo if datetime.datetime.strptime(x.date, "%Y-%m-%d").date() <= end_date]
-                return meteo
-            else:
-                raise Exception(
-                    f'Meteo statistic {key} is not supported for this field, only {",".join(field.meteo.keys())}')
-        else:
+        if field.meteo and key.lower() in field.meteo:
+            meteo = list(map(lambda x: MeteoStat(date=x['date'], value=x['value']), field.meteo[key.lower()]))
+            if start_date:
+                meteo = [x for x in meteo if start_date <= datetime.datetime.strptime(x.date, "%Y-%m-%d").date()]
+            if end_date:
+                meteo = [x for x in meteo if datetime.datetime.strptime(x.date, "%Y-%m-%d").date() <= end_date]
+            return meteo
+        elif field.metadata.country == 'Belgium':
             start_date = start_date.isoformat() if start_date else field.metadata['startDate']
             end_date = end_date.isoformat() if end_date else field.metadata['endDate']
 
             return self._api.get_meteo_data(geometry=field.metadata['geometry'], key=key,
                                             start_date=start_date, end_date=end_date)
+        else:
+            raise Exception(
+                f'Meteo statistic {key} is not supported for this field, only {",".join(field.meteo.keys())}')
