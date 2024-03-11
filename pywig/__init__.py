@@ -58,6 +58,7 @@ class Wig:
         :rtype: List
         """
         field = self.get_field_details(field_id)
+        print(field)
         if field.meteo and key.lower() in field.meteo:
             meteo = list(map(lambda x: MeteoStat(date=x['date'], value=x['value']), field.meteo[key.lower()]))
             if start_date:
@@ -65,7 +66,7 @@ class Wig:
             if end_date:
                 meteo = [x for x in meteo if datetime.datetime.strptime(x.date, "%Y-%m-%d").date() <= end_date]
             return meteo
-        elif field.metadata.country == 'Belgium':
+        elif field.metadata and field.metadata['country'] == 'Belgium':
             start_date = start_date.isoformat() if start_date else field.metadata['startDate']
             end_date = end_date.isoformat() if end_date else field.metadata['endDate']
 
