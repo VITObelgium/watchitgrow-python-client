@@ -51,7 +51,9 @@ class Wig:
         """Retrieve the meteo statistics for the selected field
 
         :param field_id: ID of the field for which to retrieve the meteo statistics
-        :param key: Key that represents what type of meteo information should be fetched. For fields inside of Belgium, the supported keys are (AVERAGE_TEMPERATURE, MAXIMUM_TEMPERATURE, MINIMUM_TEMPERATURE, RAINFALL). For fields outside of Belgium, the supported keys are (TEMPERATURE, RAINFALL).
+        :param key: Key that represents what type of meteo information should be fetched. 
+        For fields inside of Belgium, the supported keys are (AVERAGE_TEMPERATURE, MAXIMUM_TEMPERATURE, MINIMUM_TEMPERATURE, RAINFALL). 
+        For fields outside of Belgium, the supported keys are (TEMPERATURE, RAINFALL).
         :param start_date: The date from where to retrieve the meteo data
         :param end_date: The end date for the meteo data retrieval
         :return: A list of MeteoStat entries
@@ -59,7 +61,7 @@ class Wig:
         """
         field = self.get_field_details(field_id)
         print(field)
-        if field.meteo and key.lower() in field.meteo:
+        if field.meteo and key.lower() in field.meteo and len(field.meteo[key.lower()]) > 0:
             meteo = list(map(lambda x: MeteoStat(date=x['date'], value=x['value']), field.meteo[key.lower()]))
             if start_date:
                 meteo = [x for x in meteo if start_date <= datetime.datetime.strptime(x.date, "%Y-%m-%d").date()]
