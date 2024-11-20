@@ -120,7 +120,7 @@ class Api:
         :return: JSON body of the response
         """
         if response.status_code != 200:
-            raise ApiError(message='Could not execute request to the API: ' + response.status_code + ' ' + response.reason, response=response)
+            raise ApiError(message='Could not execute request to the API: %s%s' % (response.status_code, response.reason), response=response)
         else:
             return response.json()
 
