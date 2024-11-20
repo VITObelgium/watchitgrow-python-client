@@ -24,7 +24,7 @@ jobs:
         run: docker run --rm -v $GITHUB_WORKSPACE:/workspace --workdir /workspace/docs sphinxdoc/sphinx sh -c "pip3 install -r requirements.txt; make html"
 
       # Create an artifact of the HTML output
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: Documentation
           path: docs/_build/html/
