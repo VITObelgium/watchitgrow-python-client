@@ -1,17 +1,13 @@
-import json
-import os
 
-from dotenv import load_dotenv
-
-load_dotenv()
 
 # ---------------------------------------------------------
 #                  MAIN
 # ---------------------------------------------------------
-from pywig import Wig
+from ./pywig import Wig
 
 wig = Wig()
-wig.authenticate_basic(username=os.getenv('username'), password=os.getenv('password'))
+wig.authenticate_basic(username='demo@vito.be', password='demo123456')
+print(wig._auth.get_token())
 
 fields = wig.get_fields()
 
