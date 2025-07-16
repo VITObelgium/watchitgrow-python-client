@@ -77,3 +77,16 @@ class Wig:
         else:
             raise Exception(
                 f'Meteo statistic {key} is not supported for this field, only {",".join(field.meteo.keys())}')
+
+    def get_regional_greenness(self, field_id: str) -> List:
+        """Retrieve the greenness statistics for neighbouring fields
+
+        :param field_id: ID of the field for which to retrieve the greenness statistics
+        :return: A list of GreennessStat entries
+        :rtype: List
+        """
+        field = self.get_field_details(field_id)
+        if field.cropInfo and 'cropType' in field.cropInfo and 'variety' in field.cropInfo:
+            return self._api.get_regional_greenness(field_id, field.cropInfo['cropType'], field.cropInfo['variety'])
+        else:
+            raise Exception('Greenness statistics are not available for this field')

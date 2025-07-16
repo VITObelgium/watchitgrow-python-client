@@ -90,6 +90,36 @@ class Api:
         else:
             raise Exception('Could not parse the meteo response from the API')
 
+    def get_regional_greenness(self, fieldId: str, cropType: str, cropVariety: str) ->  List:
+        """Retrieve the regional greenness statistics for a certain field
+
+        :return: A list of greenness statistics
+        """
+        self._logger.debug('Requesting regional greenness statistics')
+        response = self._get('databio/application/databio/fields/%s/%s/%s/10/stats' % (fieldId, cropType, cropVariety))
+
+        cropsar_data = []
+        for item in response:
+            if 'cropsar' in item:
+                cropsar_data.extend(item['cropsar'])
+
+        # Group averages by date
+        averages_by_date = {}
+        for entry in cropsar_data:
+            date = entry['date']
+            average = entry['result']['average']
+            if date not in averages_by_date:
+                averages_by_date[date] = []
+            averages_by_date[date].append(float(average))
+
+        # Calculate average cropsar per date
+        average_cropsar_per_date = {
+            date: sum(values) / len(values) for date, values in averages_by_date.items()
+        }
+
+        return average_cropsar_per_date
+
+
     # ---------------------------------------------------------------------
     #       UTILS
     # ---------------------------------------------------------------------
